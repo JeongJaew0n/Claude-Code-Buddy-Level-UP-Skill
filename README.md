@@ -1,5 +1,7 @@
 # Claude-Code-Buddy-Rename-Skill
 
+> **Language**: [English](#claude-code-buddy-rename-skill) | [한국어](#한국어) | [中文](#中文) | [日本語](#日本語)
+
 A Claude Code skill to rename your `/buddy` companion.
 
 ## What is /buddy?
