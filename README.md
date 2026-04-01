@@ -1,4 +1,4 @@
-# Claude-Code-Buddy-Rename-Skill
+# Claude-Code-Buddy-Level-UP-Skill
 
 > **Language**: [English](#claude-code-buddy-rename-skill) | [한국어](#한국어) | [中文](#中文) | [日本語](#日本語)
 
@@ -90,7 +90,7 @@ MIT
 
 </summary>
 
-# Claude-Code-Buddy-Rename-Skill
+# Claude-Code-Buddy-Level-UP-Skill
 
 Claude Code의 `/buddy` 컴패니언 이름을 변경하는 스킬입니다.
 
@@ -165,7 +165,7 @@ Claude Code에서 스킬을 호출하세요:
 
 </summary>
 
-# Claude-Code-Buddy-Rename-Skill
+# Claude-Code-Buddy-Level-UP-Skill
 
 用于重命名 Claude Code `/buddy` 伙伴的技能。
 
@@ -240,7 +240,7 @@ cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
 
 </summary>
 
-# Claude-Code-Buddy-Rename-Skill
+# Claude-Code-Buddy-Level-UP-Skill
 
 Claude Code の `/buddy` コンパニオンの名前を変更するスキルです。
 
