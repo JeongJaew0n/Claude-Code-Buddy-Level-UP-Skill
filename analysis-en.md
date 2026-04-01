@@ -184,3 +184,50 @@ LK8()
 **Species is fixed 1:1 to the account and cannot be changed.** Even if you manually edit the species value in `~/.claude.json`, Claude Code will regenerate it based on the account UUID on restart, reverting it to the original value.
 
 The only properties users can change are **name** and **personality**, either by directly editing `~/.claude.json` or by using the `/buddy-rename` skill.
+
+## 13. Changing Buddy Language via Personality
+
+By modifying `companion.personality`, you can also **change the language** your buddy speaks in.
+
+### Verified Result
+
+Including a language instruction in the personality value makes the buddy speak in that language:
+
+```json
+{
+  "companion": {
+    "personality": "한국어로만 말하는 겁 많은 나방. 터미널의 따뜻한 빛에 이끌려 온 나방으로, 디버깅 세션을 자연 다큐멘터리처럼 해설하고 중첩 삼항연산자를 보면 깜짝 놀란다."
+  }
+}
+```
+
+### Multi-language Examples
+
+| Language | Personality Example |
+|----------|-------------------|
+| Korean | `"한국어로만 말하는 호기심 많은 토끼"` |
+| Japanese | `"日本語だけで話す好奇心旺盛なうさぎ"` |
+| Chinese | `"只用中文说话的好奇兔子"` |
+| Spanish | `"Un conejo curioso que solo habla en español"` |
+| French | `"Un lapin curieux qui ne parle qu'en français"` |
+
+**Key insight: The personality field is not just a character description — it acts as a prompt that controls the buddy's behavior.** Including language instructions will make the buddy speak in that language.
+
+## 14. Mismatch Between Species Field and Actual Rendering
+
+The `companion.species` value stored in `~/.claude.json` and the actual buddy rendered on screen **can be different.**
+
+### Verified Result
+
+- `~/.claude.json` species value: `cat`
+- Actual rendering: rabbit
+
+### Cause
+
+The buddy's actual rendering does not reference the species field in `~/.claude.json`. Instead, it **runs the account UUID-based PRNG every time** to determine the species. This means:
+
+1. The species value in `~/.claude.json` may be from initial generation or manually modified
+2. The actual rendering always uses the PRNG result seeded by `oauthAccount.accountUuid`
+3. Manually changing the species field has **no effect on rendering**
+
+**Key insight: The species field in `~/.claude.json` is unreliable.** The actual buddy appearance is determined at runtime by the account UUID.

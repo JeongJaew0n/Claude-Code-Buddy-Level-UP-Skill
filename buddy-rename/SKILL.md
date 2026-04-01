@@ -46,3 +46,20 @@ print('Restart Claude Code to apply the change.')
 - Buddy name is limited to 14 characters max
 - Species (shape) is fixed based on account UUID and cannot be changed
 - To change personality, manually edit `companion.personality` in `~/.claude.json`
+
+## Bonus: Change Buddy Language
+
+The `personality` field also controls what **language** the buddy speaks. Include a language instruction in the personality value:
+
+```json
+{
+  "personality": "한국어로만 말하는 호기심 많은 토끼"
+}
+```
+
+Examples for other languages:
+- Japanese: `"日本語だけで話す好奇心旺盛なうさぎ"`
+- Chinese: `"只用中文说话的好奇兔子"`
+- Spanish: `"Un conejo curioso que solo habla en español"`
+
+Restart Claude Code after changing personality to apply.

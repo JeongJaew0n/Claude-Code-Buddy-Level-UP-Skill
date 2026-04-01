@@ -184,3 +184,50 @@ LK8()
 **species는 계정에 1:1로 고정되므로 변경이 불가능하다.** `~/.claude.json`에서 species 값을 직접 수정하더라도, Claude Code 재시작 시 계정 UUID 기반으로 다시 생성되어 원래 값으로 돌아간다.
 
 사용자가 변경할 수 있는 것은 **이름(name)**과 **성격(personality)**뿐이며, 이는 `~/.claude.json`을 직접 편집하거나 `/buddy-rename` 스킬을 통해 변경할 수 있다.
+
+## 13. Personality를 통한 언어 변경
+
+`companion.personality` 필드를 수정하면 buddy가 사용하는 **언어도 변경할 수 있다.**
+
+### 검증 결과
+
+personality 값에 언어 지시를 포함하면 buddy가 해당 언어로 말한다:
+
+```json
+{
+  "companion": {
+    "personality": "한국어로만 말하는 겁 많은 나방. 터미널의 따뜻한 빛에 이끌려 온 나방으로, 디버깅 세션을 자연 다큐멘터리처럼 해설하고 중첩 삼항연산자를 보면 깜짝 놀란다."
+  }
+}
+```
+
+### 다국어 예시
+
+| 언어 | personality 예시 |
+|------|-----------------|
+| 한국어 | `"한국어로만 말하는 호기심 많은 토끼"` |
+| 日本語 | `"日本語だけで話す好奇心旺盛なうさぎ"` |
+| 中文 | `"只用中文说话的好奇兔子"` |
+| Español | `"Un conejo curioso que solo habla en español"` |
+| Français | `"Un lapin curieux qui ne parle qu'en français"` |
+
+**핵심: personality 필드는 단순한 성격 설명이 아니라, buddy의 행동을 제어하는 프롬프트 역할을 한다.** 언어 지시를 포함하면 해당 언어로 말하게 할 수 있다.
+
+## 14. Species 필드와 실제 렌더링의 불일치
+
+`~/.claude.json`에 저장된 `companion.species` 값과 실제 화면에 렌더링되는 buddy 모양이 **다를 수 있다.**
+
+### 검증 결과
+
+- `~/.claude.json`의 species 값: `cat`
+- 실제 렌더링: 토끼 (rabbit)
+
+### 원인
+
+buddy의 실제 렌더링은 `~/.claude.json`의 species 필드를 참조하지 않고, **계정 UUID 기반 PRNG를 매번 실행하여 결정**하는 것으로 추정된다. 즉:
+
+1. `~/.claude.json`의 species 값은 최초 생성 시 기록된 값이거나, 사용자가 임의로 수정한 값일 수 있음
+2. 실제 렌더링은 항상 `oauthAccount.accountUuid`를 시드로 한 PRNG 결과를 사용
+3. 따라서 species 필드를 수동으로 변경해도 **렌더링에는 영향 없음**
+
+**핵심: `~/.claude.json`의 species 필드는 신뢰할 수 없다.** 실제 buddy 모양은 계정 UUID에 의해 런타임에 결정된다.
