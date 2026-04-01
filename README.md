@@ -1,14 +1,37 @@
 # Claude-Code-Buddy-Level-UP-Skill
 
-> **Language**: [English](#claude-code-buddy-rename-skill) | [한국어](#한국어) | [中文](#中文) | [日本語](#日本語)
+> **Language**: [English](#claude-code-buddy-level-up-skill) | [한국어](#한국어) | [中文](#中文) | [日本語](#日本語)
 
-A Claude Code skill to rename your `/buddy` companion.
+A Claude Code skill and analysis toolkit for customizing your `/buddy` companion.
 
-## What is /buddy?
+## Features
 
-`/buddy` is a Claude Code feature (available since April 2026) that gives you a virtual companion displayed next to your input box. Each buddy has a unique species, eyes, hat, rarity, and stats — all deterministically generated from your account UUID.
+- **Rename Buddy** — Change your buddy's name (max 14 characters)
+- **Change Language** — Make your buddy speak in any language via personality field
+- **Customize Personality** — Define your buddy's character, tone, and behavior
+- **Deep Analysis** — Full reverse-engineering analysis of the /buddy feature (15 sections)
+  - Species generation mechanism (deterministic PRNG)
+  - Rarity, stats, eye, hat system
+  - Speech trigger conditions (test failures, build errors)
+  - Rendering and activation internals
 
-**The only things you can change are the name and personality.** This skill makes renaming easy.
+## What You Can Change
+
+| Property | How |
+|----------|-----|
+| **Name** | `/buddy-rename NewName` or edit `~/.claude.json` |
+| **Personality** | Edit `companion.personality` in `~/.claude.json` |
+| **Language** | Include language instruction in personality (e.g. `"한국어로만 말하는 토끼"`) |
+
+## What You CAN'T Change
+
+| Property | Why |
+|----------|-----|
+| species | Deterministic PRNG seeded by account UUID |
+| eye | Same PRNG, fixed to account |
+| hat | Same PRNG, fixed to account |
+| rarity | Same PRNG, fixed to account |
+| stats | Same PRNG, fixed to account |
 
 ## Installation
 
@@ -20,51 +43,26 @@ cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
 
 ## Usage
 
-Invoke the skill in Claude Code:
-
+**Rename:**
 ```
 /buddy-rename NewName
 ```
+Or just say: "rename my buddy", "buddy 이름 바꿔줘"
 
-Or just say:
-- "rename my buddy"
-- "change buddy name to Mochi"
-- "buddy 이름 바꿔줘"
-
-If no name is provided, you'll be prompted to enter one.
-
-### Constraints
-
-- Name must be **14 characters or less**
-- Restart Claude Code after renaming for the change to take effect
-
-## How it works
-
-The skill edits `~/.claude.json` > `companion.name`. That's it.
-
+**Change language** (edit `~/.claude.json` manually):
 ```json
-{
-  "companion": {
-    "name": "YourNewName",
-    "species": "rabbit",
-    "eye": "dot",
-    "hat": "none",
-    ...
-  }
-}
+{ "companion": { "personality": "한국어로만 말하는 소심한 토끼" } }
 ```
 
-## What you CAN'T change
+Restart Claude Code after any change to apply.
 
-| Property | Why |
-|----------|-----|
-| species | Deterministic PRNG seeded by account UUID |
-| eye | Same PRNG, fixed to account |
-| hat | Same PRNG, fixed to account |
-| rarity | Same PRNG, fixed to account |
-| stats | Same PRNG, fixed to account |
+## Analysis
 
-See [analysis-en.md](analysis-en.md) for the full reverse-engineering analysis, or [analysis-ko.md](analysis-ko.md) for the Korean version.
+Full reverse-engineering analysis of the /buddy feature is available:
+- [analysis-en.md](analysis-en.md) (English)
+- [analysis-ko.md](analysis-ko.md) (Korean)
+
+Covers: species generation, PRNG internals, rarity system, rendering functions, speech triggers, activation conditions, and more.
 
 ## Project Structure
 
@@ -92,57 +90,22 @@ MIT
 
 # Claude-Code-Buddy-Level-UP-Skill
 
-Claude Code의 `/buddy` 컴패니언 이름을 변경하는 스킬입니다.
+Claude Code의 `/buddy` 컴패니언을 커스터마이징하는 스킬 및 분석 툴킷입니다.
 
-## /buddy란?
+## 기능
 
-`/buddy`는 Claude Code의 기능으로 (2026년 4월부터 사용 가능), 입력창 옆에 표시되는 가상 컴패니언입니다. 각 buddy는 고유한 species, eye, hat, rarity, stats를 가지며, 모두 계정 UUID를 기반으로 결정론적으로 생성됩니다.
+- **이름 변경** — buddy 이름 변경 (최대 14자)
+- **언어 변경** — personality 필드를 통해 buddy가 원하는 언어로 말하게 하기
+- **성격 커스터마이징** — buddy의 캐릭터, 말투, 행동 정의
+- **심층 분석** — /buddy 기능 리버스 엔지니어링 분석 (15개 섹션)
 
-**변경할 수 있는 것은 이름과 성격뿐입니다.** 이 스킬은 이름 변경을 간편하게 해줍니다.
+## 변경 가능한 것
 
-## 설치
-
-`buddy-rename/` 폴더를 Claude Code 스킬 디렉토리에 복사하세요:
-
-```bash
-cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
-```
-
-## 사용법
-
-Claude Code에서 스킬을 호출하세요:
-
-```
-/buddy-rename 새이름
-```
-
-또는 자연어로:
-- "buddy 이름 바꿔줘"
-- "버디 이름을 모찌로 변경해줘"
-- "rename my buddy"
-
-이름을 입력하지 않으면 입력을 요청합니다.
-
-### 제약 사항
-
-- 이름은 **최대 14자**
-- 이름 변경 후 Claude Code를 재시작해야 적용됩니다
-
-## 작동 방식
-
-`~/.claude.json` > `companion.name`을 수정합니다. 그게 전부입니다.
-
-```json
-{
-  "companion": {
-    "name": "새이름",
-    "species": "rabbit",
-    "eye": "dot",
-    "hat": "none",
-    ...
-  }
-}
-```
+| 속성 | 방법 |
+|------|------|
+| **이름** | `/buddy-rename 새이름` 또는 `~/.claude.json` 편집 |
+| **성격** | `~/.claude.json`의 `companion.personality` 편집 |
+| **언어** | personality에 언어 지시 포함 (예: `"한국어로만 말하는 토끼"`) |
 
 ## 변경할 수 없는 것
 
@@ -153,6 +116,29 @@ Claude Code에서 스킬을 호출하세요:
 | hat | 동일 PRNG, 계정에 고정 |
 | rarity | 동일 PRNG, 계정에 고정 |
 | stats | 동일 PRNG, 계정에 고정 |
+
+## 설치
+
+```bash
+cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
+```
+
+## 사용법
+
+**이름 변경:**
+```
+/buddy-rename 새이름
+```
+또는: "buddy 이름 바꿔줘", "rename my buddy"
+
+**언어 변경** (`~/.claude.json` 직접 편집):
+```json
+{ "companion": { "personality": "한국어로만 말하는 소심한 토끼" } }
+```
+
+변경 후 Claude Code를 재시작하면 적용됩니다.
+
+## 분석
 
 상세 분석은 [analysis-ko.md](analysis-ko.md) (한국어) 또는 [analysis-en.md](analysis-en.md) (영어)를 참고하세요.
 
@@ -167,57 +153,22 @@ Claude Code에서 스킬을 호출하세요:
 
 # Claude-Code-Buddy-Level-UP-Skill
 
-用于重命名 Claude Code `/buddy` 伙伴的技能。
+用于自定义 Claude Code `/buddy` 伙伴的技能和分析工具包。
 
-## 什么是 /buddy？
+## 功能
 
-`/buddy` 是 Claude Code 的功能（2026年4月起可用），在输入框旁边显示一个虚拟伙伴。每个 buddy 都有独特的 species、eye、hat、rarity 和 stats——全部基于账户 UUID 确定性生成。
+- **重命名 Buddy** — 更改 buddy 名字（最多14个字符）
+- **更改语言** — 通过 personality 字段让 buddy 使用任意语言
+- **自定义性格** — 定义 buddy 的角色、语气和行为
+- **深度分析** — /buddy 功能逆向工程分析（15个章节）
 
-**你唯一能改变的是名字和性格。** 这个技能让重命名变得简单。
+## 可以更改的内容
 
-## 安装
-
-将 `buddy-rename/` 文件夹复制到 Claude Code 技能目录：
-
-```bash
-cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
-```
-
-## 使用方法
-
-在 Claude Code 中调用技能：
-
-```
-/buddy-rename 新名字
-```
-
-或者用自然语言：
-- "rename my buddy"
-- "把 buddy 的名字改成 Mochi"
-- "给伙伴改名"
-
-如果未提供名字，系统会提示你输入。
-
-### 限制
-
-- 名字最长 **14个字符**
-- 重命名后需要重启 Claude Code 才能生效
-
-## 工作原理
-
-编辑 `~/.claude.json` > `companion.name`。就这么简单。
-
-```json
-{
-  "companion": {
-    "name": "新名字",
-    "species": "rabbit",
-    "eye": "dot",
-    "hat": "none",
-    ...
-  }
-}
-```
+| 属性 | 方法 |
+|------|------|
+| **名字** | `/buddy-rename 新名字` 或编辑 `~/.claude.json` |
+| **性格** | 编辑 `~/.claude.json` 中的 `companion.personality` |
+| **语言** | 在 personality 中包含语言指令（如 `"只用中文说话的好奇兔子"`） |
 
 ## 无法更改的内容
 
@@ -228,6 +179,29 @@ cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
 | hat | 相同 PRNG，绑定账户 |
 | rarity | 相同 PRNG，绑定账户 |
 | stats | 相同 PRNG，绑定账户 |
+
+## 安装
+
+```bash
+cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
+```
+
+## 使用方法
+
+**重命名：**
+```
+/buddy-rename 新名字
+```
+或者："rename my buddy"、"给伙伴改名"
+
+**更改语言**（直接编辑 `~/.claude.json`）：
+```json
+{ "companion": { "personality": "只用中文说话的好奇兔子" } }
+```
+
+更改后重启 Claude Code 即可生效。
+
+## 分析
 
 详细分析请参阅 [analysis-en.md](analysis-en.md)（英文）或 [analysis-ko.md](analysis-ko.md)（韩文）。
 
@@ -242,57 +216,22 @@ cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
 
 # Claude-Code-Buddy-Level-UP-Skill
 
-Claude Code の `/buddy` コンパニオンの名前を変更するスキルです。
+Claude Code の `/buddy` コンパニオンをカスタマイズするスキルと分析ツールキットです。
 
-## /buddy とは？
+## 機能
 
-`/buddy` は Claude Code の機能で（2026年4月から利用可能）、入力ボックスの横にバーチャルコンパニオンを表示します。各 buddy は固有の species、eye、hat、rarity、stats を持ち、すべてアカウント UUID に基づいて決定論的に生成されます。
+- **名前変更** — buddy の名前を変更（最大14文字）
+- **言語変更** — personality フィールドで buddy が好きな言語で話すように設定
+- **パーソナリティのカスタマイズ** — buddy のキャラクター、口調、行動を定義
+- **詳細分析** — /buddy 機能のリバースエンジニアリング分析（15セクション）
 
-**変更できるのは名前とパーソナリティだけです。** このスキルで簡単に名前を変更できます。
+## 変更できるもの
 
-## インストール
-
-`buddy-rename/` フォルダを Claude Code のスキルディレクトリにコピーしてください：
-
-```bash
-cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
-```
-
-## 使い方
-
-Claude Code でスキルを呼び出します：
-
-```
-/buddy-rename 新しい名前
-```
-
-または自然言語で：
-- "rename my buddy"
-- "buddy の名前を Mochi に変えて"
-- "バディの名前を変更して"
-
-名前が指定されていない場合、入力を求められます。
-
-### 制約事項
-
-- 名前は**最大14文字**
-- 名前変更後、Claude Code を再起動すると反映されます
-
-## 仕組み
-
-`~/.claude.json` > `companion.name` を編集します。それだけです。
-
-```json
-{
-  "companion": {
-    "name": "新しい名前",
-    "species": "rabbit",
-    "eye": "dot",
-    "hat": "none",
-    ...
-  }
-}
-```
+| プロパティ | 方法 |
+|-----------|------|
+| **名前** | `/buddy-rename 新しい名前` または `~/.claude.json` を編集 |
+| **パーソナリティ** | `~/.claude.json` の `companion.personality` を編集 |
+| **言語** | personality に言語指示を含める（例：`"日本語だけで話す好奇心旺盛なうさぎ"`） |
 
 ## 変更できないもの
 
@@ -303,6 +242,29 @@ Claude Code でスキルを呼び出します：
 | hat | 同じ PRNG、アカウントに固定 |
 | rarity | 同じ PRNG、アカウントに固定 |
 | stats | 同じ PRNG、アカウントに固定 |
+
+## インストール
+
+```bash
+cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
+```
+
+## 使い方
+
+**名前変更：**
+```
+/buddy-rename 新しい名前
+```
+または："buddy の名前を変えて"、"rename my buddy"
+
+**言語変更**（`~/.claude.json` を直接編集）：
+```json
+{ "companion": { "personality": "日本語だけで話す好奇心旺盛なうさぎ" } }
+```
+
+変更後、Claude Code を再起動すると反映されます。
+
+## 分析
 
 詳細な分析は [analysis-en.md](analysis-en.md)（英語）または [analysis-ko.md](analysis-ko.md)（韓国語）をご覧ください。
 
