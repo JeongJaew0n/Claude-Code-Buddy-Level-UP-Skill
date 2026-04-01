@@ -231,3 +231,55 @@ buddy의 실제 렌더링은 `~/.claude.json`의 species 필드를 참조하지 
 3. 따라서 species 필드를 수동으로 변경해도 **렌더링에는 영향 없음**
 
 **핵심: `~/.claude.json`의 species 필드는 신뢰할 수 없다.** 실제 buddy 모양은 계정 UUID에 의해 런타임에 결정된다.
+
+## 15. Buddy Speech 메커니즘 분석
+
+### 말하는 방식
+
+Buddy의 speech는 **LLM 기반**으로 생성된다. 시스템 프롬프트로 다음이 전달된다:
+
+```
+A small ${species} named ${name} sits beside the user's input box
+and occasionally comments in a speech bubble.
+You're not ${name} — it's a separate watcher.
+```
+
+`personality` 필드가 이 프롬프트에 포함되어 buddy의 말투, 성격, 언어를 결정한다.
+
+### 핵심 상태 변수
+
+| 변수 | 역할 |
+|------|------|
+| `companionReaction` | 현재 리액션 상태. 설정되면 speech bubble 표시 |
+| `companionMuted` | mute 상태. true이면 buddy가 말하지 않음 |
+| `companionPetAt` | buddy를 쓰다듬은(pet) 시점 |
+
+### 타이밍 상수
+
+| 상수 | 값 | 의미 |
+|------|-----|------|
+| `Sr_` | 500ms | 틱 간격 |
+| `D58` | 20틱 (10초) | 리액션 표시 지속 시간 |
+| `Er_` | 100 | 최소 컬럼 너비. 화면이 이보다 좁으면 buddy 미표시 |
+
+### 트리거 조건
+
+Buddy는 **Bash 명령 실행 결과**를 감지하여 반응한다:
+
+**테스트/빌드 실패 감지 (E35):**
+```regex
+/\b[1-9]\d* (failed|failing)\b|\btests? failed\b|^FAIL(ED)?\b| ✗ | ✘ /im
+```
+
+**에러 감지 (C35):**
+```regex
+/\berror:|\bexception\b|\btraceback\b|\bpanicked at\b|\bfatal:|exit code [1-9]/i
+```
+
+즉, 테스트 실패, 빌드 에러, 예외 발생 등이 감지되면 buddy가 리액션을 보인다.
+
+### 말하지 않는 조건
+
+- `companionMuted`가 true일 때
+- 터미널 너비가 100컬럼 미만일 때
+- 사용자가 companion 탭을 선택하지 않았을 때

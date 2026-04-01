@@ -231,3 +231,55 @@ The buddy's actual rendering does not reference the species field in `~/.claude.
 3. Manually changing the species field has **no effect on rendering**
 
 **Key insight: The species field in `~/.claude.json` is unreliable.** The actual buddy appearance is determined at runtime by the account UUID.
+
+## 15. Buddy Speech Mechanism Analysis
+
+### How It Speaks
+
+Buddy speech is **LLM-generated**. The following system prompt is sent:
+
+```
+A small ${species} named ${name} sits beside the user's input box
+and occasionally comments in a speech bubble.
+You're not ${name} — it's a separate watcher.
+```
+
+The `personality` field is included in this prompt, determining the buddy's tone, character, and language.
+
+### Key State Variables
+
+| Variable | Role |
+|----------|------|
+| `companionReaction` | Current reaction state. When set, the speech bubble is displayed |
+| `companionMuted` | Mute state. When true, buddy does not speak |
+| `companionPetAt` | Timestamp of when the buddy was last petted |
+
+### Timing Constants
+
+| Constant | Value | Meaning |
+|----------|-------|---------|
+| `Sr_` | 500ms | Tick interval |
+| `D58` | 20 ticks (10s) | Reaction display duration |
+| `Er_` | 100 | Minimum column width. Buddy hidden if terminal is narrower |
+
+### Trigger Conditions
+
+Buddy reacts by detecting **Bash command output**:
+
+**Test/build failure detection (E35):**
+```regex
+/\b[1-9]\d* (failed|failing)\b|\btests? failed\b|^FAIL(ED)?\b| ✗ | ✘ /im
+```
+
+**Error detection (C35):**
+```regex
+/\berror:|\bexception\b|\btraceback\b|\bpanicked at\b|\bfatal:|exit code [1-9]/i
+```
+
+When test failures, build errors, or exceptions are detected, the buddy shows a reaction.
+
+### When Buddy Stays Silent
+
+- `companionMuted` is true
+- Terminal width is less than 100 columns
+- User has not selected the companion tab
