@@ -84,7 +84,11 @@ MIT
 ---
 
 <details>
-<summary>한국어</summary>
+<summary>
+
+## 한국어
+
+</summary>
 
 # Claude-Code-Buddy-Rename-Skill
 
@@ -155,7 +159,11 @@ Claude Code에서 스킬을 호출하세요:
 </details>
 
 <details>
-<summary>中文</summary>
+<summary>
+
+## 中文
+
+</summary>
 
 # Claude-Code-Buddy-Rename-Skill
 
@@ -226,7 +234,11 @@ cp -r buddy-rename/ ~/.claude/skills/buddy-rename/
 </details>
 
 <details>
-<summary>日本語</summary>
+<summary>
+
+## 日本語
+
+</summary>
 
 # Claude-Code-Buddy-Rename-Skill
 
